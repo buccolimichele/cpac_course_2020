@@ -1,12 +1,12 @@
 class Box{
     Body body;
     Box2DProcessing  box2d;
-    color defColor = color(127, 127, 127);
+    color defColor = color(200, 200, 200);
     color contactColor;
     float time_to_color,time_index;
     
     SoundFile sample;
-    Box(Box2DProcessing  box2d, PolygonShape ps, BodyDef bd, PVector position, SoundFile sample){
+    Box(Box2DProcessing  box2d, CircleShape ps, BodyDef bd, PVector position, SoundFile sample){
         this.box2d = box2d;    
         bd.position.set(this.box2d.coordPixelsToWorld(position.x, position.y));
         this.body = this.box2d.createBody(bd);
@@ -23,6 +23,7 @@ class Box{
     }
     void applyForce(Vec2 force){
       this.body.applyForce(force, this.body.getWorldCenter());
+      
     }
     void draw(){
         Vec2 pos=this.box2d.getBodyPixelCoord(this.body);
@@ -32,8 +33,11 @@ class Box{
         rotate(-angle);
         fill(lerpColor(this.contactColor, this.defColor, map(this.time_index, 0, this.time_to_color,0,1)));
         stroke(0);
-        rectMode(CENTER);        
-        rect(0, 0, WIDTHBOX, HEIGHTBOX);
+        //triangle(-WIDTHBOX/2, -HEIGHTBOX/2, WIDTHBOX/2, -HEIGHTBOX/2, 0, HEIGHTBOX/2);  
+        //rectMode(CENTER);            
+        //rect(0, 0, WIDTHBOX, HEIGHTBOX);
+        ellipse(0, 0, RADIUS_CIRCLE, RADIUS_CIRCLE);  
+
         this.time_index=min(this.time_index+1, this.time_to_color);
         popMatrix();
     }
@@ -47,6 +51,12 @@ class Box{
     void play(){
      // this.sample.jump(0);
      if(! this.sample.isPlaying())      this.sample.play();    
+    }
+    void update(ArrayList<Box> boxes){
+      /*for(Box other: boxes){
+        float dist=other.body.position.get().sub(this.body.position.get());
+      
+      }*/
     }
     void bounce(){
       Vec2 vel=this.body.getLinearVelocity();
