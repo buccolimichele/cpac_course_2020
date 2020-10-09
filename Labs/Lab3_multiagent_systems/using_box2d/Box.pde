@@ -4,9 +4,9 @@ class Box{
     color defColor = color(200, 200, 200);
     color contactColor;
     float time_to_color,time_index;
-    
+    int nextPoint;
     SoundFile sample;
-    Box(Box2DProcessing  box2d, CircleShape ps, BodyDef bd, PVector position, SoundFile sample){
+    Box(Box2DProcessing  box2d, CircleShape ps, BodyDef bd, PVector position, SoundFile sample, int nextPoint){
         this.box2d = box2d;    
         bd.position.set(this.box2d.coordPixelsToWorld(position.x, position.y));
         this.body = this.box2d.createBody(bd);
@@ -17,6 +17,7 @@ class Box{
         this.sample=sample;
         this.time_to_color=this.sample.duration()*frameRate;
         this.time_index=time_to_color;
+        this.nextPoint=nextPoint;
         colorMode(HSB, 255);
         this.contactColor= color(random(0,255),255,255);
         colorMode(RGB, 255);
@@ -33,6 +34,7 @@ class Box{
         rotate(-angle);
         fill(lerpColor(this.contactColor, this.defColor, map(this.time_index, 0, this.time_to_color,0,1)));
         stroke(0);
+        strokeWeight(0);
         //triangle(-WIDTHBOX/2, -HEIGHTBOX/2, WIDTHBOX/2, -HEIGHTBOX/2, 0, HEIGHTBOX/2);  
         //rectMode(CENTER);            
         //rect(0, 0, WIDTHBOX, HEIGHTBOX);
