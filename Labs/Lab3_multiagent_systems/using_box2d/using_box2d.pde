@@ -47,6 +47,7 @@ void mousePressed() {
  if(mouseButton==LEFT){//insert a new box
     int i= int(min(random(0, filenames.length), filenames.length-1));
     int p=path.closestTarget(new Vec2(mouseX, mouseY));
+    while(!filenames[i].endsWith(".wav")){i= int(min(random(0, filenames.length), filenames.length-1));}
     Box b = new Box(box2d, cs, bd, new PVector(mouseX, mouseY), new SoundFile(this, "sounds/"+filenames[i]),p);
     boxes.add(b);     
   }
@@ -92,8 +93,14 @@ Vec2 computeForce(Box b){
     b.nextPoint=path.nextPoint(b.nextPoint);
     direction= direction2;
   }
-
-  return new Vec2(direction.x,-direction.y).mulLocal(0.5);
+  direction.mulLocal(0.2);
+  if(direction.length()>5){
+    direction.mulLocal(5/direction.length());
+  }
+  strokeWeight(2);
+  stroke(255);
+  line(pos.x, pos.y, path.points[b.nextPoint].x, path.points[b.nextPoint].y);
+  return new Vec2(direction.x,-direction.y);//.mulLocal(0.2);
 }
  
 void draw() {

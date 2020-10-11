@@ -55,10 +55,23 @@ class Box{
      if(! this.sample.isPlaying())      this.sample.play();    
     }
     void update(ArrayList<Box> boxes){
-      /*for(Box other: boxes){
-        float dist=other.body.position.get().sub(this.body.position.get());
-      
-      }*/
+      Vec2 mypos=this.body.getPosition();
+      Vec2 otherpos;
+      Vec2 direction;
+      float dist;
+      float steerDist=6;
+      for(Box other: boxes){
+        if(this.body==other.body){continue;}
+        otherpos=other.body.getPosition();
+        direction=otherpos.sub(mypos);        
+        dist=direction.length();
+        println(dist);
+        if(dist<steerDist){
+          direction.mulLocal(-3/dist);
+          println("applying force!", direction);
+          this.applyForce(direction); // normalization with respect to the length, but 
+        }
+      }
     }
     void bounce(){
       Vec2 vel=this.body.getLinearVelocity();
